@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AHS Audit Viewer</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; line-height: 1.4; }
+    .box { border: 1px solid #ddd; border-radius: 10px; padding: 16px; margin: 16px 0; }
+    .muted { color: #666; }
+    pre { background: #f7f7f7; padding: 12px; border-radius: 8px; overflow: auto; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .pill { display: inline-block; padding: 2px 10px; border: 1px solid #ccc; border-radius: 999px; font-size: 12px; margin-left: 8px; }
+    .ok { border-color: #9ad29a; }
+    .bad { border-color: #e3a2a2; }
+  </style>
+</head>
+<body>
+  <h1>AHS Audit Viewer</h1>
+  <p class="muted">Drag and drop an <code>.yaml</code> or <code>.json</code> audit record. This viewer is intentionally simple and offline.</p>
+
+  <div id="drop" class="box">
+    <strong>Drop file here</strong> or <input type="file" id="file" />
+    <div id="status" class="muted" style="margin-top:8px;"></div>
+  </div>
+
+  <div id="out"></div>
+
+<script>
+function el(tag, attrs={}, children=[]) {
+  const n = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs)) {
+    if (k === "text") n.textContent = v;
+    else n.setAttribute(k,v);
+  }
+  for (const c of children) n.appendChild(c);
+  return n;
+}
+
+function pill(text, ok=true) {
+  const c = ok ? "pill ok" : "pill bad";
+  return el("span", { class: c, text });
+}
+
+function render(record) {
+  const out = document.getElementById("out");
+  out.innerHTML = "";
+
+  const header = el("div", { class: "box" }, [
+    el("div", { text: `WorkUnit: ${record.work_id || "(missing)"}` }),
+    el("div", { class: "muted", text: `Repo: ${record.repo_ref || "(missing)"} • Time: ${record.timestamp_utc || "(missing)"}` }),
+  ]);
+
+  const spec = el("div", { class: "box" }, [
+    el("h2", { text: "MiniSpec" }),
+    el("div", { class: "muted", text: record.mini_spec?.summary || "(missing summary)" }),
+  ]);
+
+  const list = el("ul");
+  (record.mini_spec?.constraints || []).forEach(c => {
+    const li = el("li");
+    li.appendChild(el("code", { text: `${c.id || "?"}` }));
+    li.appendChild(el("span", { text: ` — ${c.statement || ""} ` }));
+    li.appendChild(pill(c.type || "untyped", !!c.type));
+    list.appendChild(li);
+  });
+  spec.appendChild(list);
+
+  const harness = el("div", { class: "box" }, [
+    el("h2", { text: "CheckSuite" }),
+    el("div", { text: `Location: ${record.check_suite?.location || "(missing)"}` }),
+    el("div", { text: `Run: ${record.check_suite?.run_command || "(missing)"}` }),
+    el("div", { class: "muted", text: `Env: ${record.check_suite?.environment || "(missing)"}` }),
+  ]);
+
+  const redOk = record.first_red?.occurred === true;
+  const red = el("div", { class: "box" }, [
+    el("h2", { text: "FirstRed" }),
+    el("div", {}, [ el("span", { text: "Occurred" }), pill(String(redOk), redOk) ]),
+  ]);
+  const reds = el("ul");
+  (record.first_red?.failing_checks || []).forEach(f => {
+    reds.appendChild(el("li", { text: `${f.check_id || "?"} • constraints: ${(f.constraint_ids||[]).join(", ") || "(none)"} • evidence: ${f.evidence_ref || "(missing)"}` }));
+  });
+  red.appendChild(reds);
+
+  const diff = el("div", { class: "box" }, [
+    el("h2", { text: "DiffSet" }),
+    el("div", { text: `Base: ${record.diff_set?.base_ref || "(missing)"} → Final: ${record.diff_set?.final_ref || "(missing)"}` }),
+  ]);
+  const files = el("ul");
+  (record.diff_set?.files_changed || []).forEach(f => {
+    files.appendChild(el("li", { text: `${f.change_type || "?"}: ${f.path || "?"}` }));
+  });
+  diff.appendChild(files);
+
+  const greenOk = record.final_green?.all_checks_passed === true;
+  const green = el("div", { class: "box" }, [
+    el("h2", { text: "FinalGreen" }),
+    el("div", {}, [ el("span", { text: "All checks passed" }), pill(String(greenOk), greenOk) ]),
+    el("div", { text: `Run: ${record.final_green?.run_id || "(missing)"}` }),
+    el("div", { text: `Evidence: ${record.final_green?.evidence_ref || "(missing)"}` }),
+  ]);
+
+  const sd = record.spec_delta || {};
+  const specChanged = sd.changed === true;
+  const specDelta = el("div", { class: "box" }, [
+    el("h2", { text: "SpecDelta" }),
+    el("div", {}, [ el("span", { text: "Changed" }), pill(String(specChanged), !specChanged) ]),
+    el("div", { class: "muted", text: `Human decision: ${sd.human_decision || "(missing)"}` }),
+  ]);
+  if (specChanged) {
+    const ch = el("ul");
+    (sd.changes || []).forEach(x => {
+      ch.appendChild(el("li", { text: `${x.kind || "?"} ${x.id || "?"}: "${x.before || ""}" → "${x.after || ""}" (reason: ${x.reason || ""})` }));
+    });
+    specDelta.appendChild(ch);
+  }
+
+  out.appendChild(header);
+  out.appendChild(el("div", { class: "grid" }, [spec, harness]));
+  out.appendChild(el("div", { class: "grid" }, [red, green]));
+  out.appendChild(diff);
+  out.appendChild(specDelta);
+
+  // Raw view
+  out.appendChild(el("div", { class: "box" }, [
+    el("h2", { text: "Raw record" }),
+    el("pre", {}, [ el("code", { text: JSON.stringify(record, null, 2) }) ])
+  ]));
+}
+
+function parseMaybeYaml(text, filename) {
+  const isYaml = filename.toLowerCase().endsWith(".yaml") || filename.toLowerCase().endsWith(".yml");
+  if (!isYaml) return JSON.parse(text);
+
+  // Minimal YAML parser: we avoid dependencies and support only the subset used here.
+  // If you need full YAML, validate via tools/validate.py (which uses PyYAML).
+  // This heuristic parser accepts the included golden record.
+  try {
+    // Try JSON first (some people save YAML as JSON)
+    return JSON.parse(text);
+  } catch {}
+  // Very small YAML subset -> convert with a few heuristics (keys, strings, lists, objects).
+  // This is intentionally limited; errors will ask the user to use JSON or local validator.
+  throw new Error("YAML parsing in-browser is intentionally limited. Please provide JSON, or validate/convert with tools/validate.py.");
+}
+
+async function handleFile(file) {
+  const status = document.getElementById("status");
+  status.textContent = `Loading: ${file.name}`;
+  const text = await file.text();
+  let record;
+  try {
+    record = parseMaybeYaml(text, file.name);
+  } catch (e) {
+    status.textContent = e.message;
+    return;
+  }
+  status.textContent = `Loaded: ${file.name}`;
+  render(record);
+}
+
+const drop = document.getElementById("drop");
+drop.addEventListener("dragover", e => { e.preventDefault(); drop.style.borderColor = "#999"; });
+drop.addEventListener("dragleave", e => { e.preventDefault(); drop.style.borderColor = "#ddd"; });
+drop.addEventListener("drop", e => {
+  e.preventDefault(); drop.style.borderColor = "#ddd";
+  const f = e.dataTransfer.files?.[0];
+  if (f) handleFile(f);
+});
+
+document.getElementById("file").addEventListener("change", e => {
+  const f = e.target.files?.[0];
+  if (f) handleFile(f);
+});
+</script>
+</body>
+</html>

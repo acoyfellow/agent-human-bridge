@@ -1,0 +1,7 @@
+{
+  "name": "ahs-agent-human-bridge",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Agent\u2013Human Bridge Spec (AHS): state machine + audit trail + ontology",
+  "license": "MIT"
+}

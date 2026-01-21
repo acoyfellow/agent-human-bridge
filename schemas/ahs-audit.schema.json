@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/ahs-audit.schema.json",
+  "title": "AHS Audit Record",
+  "type": "object",
+  "required": [
+    "audit_version",
+    "work_id",
+    "timestamp_utc",
+    "repo_ref",
+    "actor",
+    "mini_spec",
+    "check_suite",
+    "first_red",
+    "diff_set",
+    "final_green",
+    "spec_delta"
+  ],
+  "properties": {
+    "audit_version": {
+      "type": "string"
+    },
+    "work_id": {
+      "type": "string"
+    },
+    "timestamp_utc": {
+      "type": "string"
+    },
+    "repo_ref": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "object",
+      "required": [
+        "human",
+        "agent"
+      ],
+      "properties": {
+        "human": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "agent": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "mini_spec": {
+      "type": "object",
+      "required": [
+        "summary",
+        "constraints",
+        "out_of_scope"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "constraints": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "statement",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "statement": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "functional",
+                  "invariant",
+                  "negative",
+                  "compatibility",
+                  "performance",
+                  "security"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "check_suite": {
+      "type": "object",
+      "required": [
+        "location",
+        "run_command",
+        "environment"
+      ],
+      "properties": {
+        "location": {
+          "type": "string"
+        },
+        "run_command": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "first_red": {
+      "type": "object",
+      "required": [
+        "occurred",
+        "failing_checks"
+      ],
+      "properties": {
+        "occurred": {
+          "type": "boolean"
+        },
+        "failing_checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "check_id",
+              "constraint_ids",
+              "evidence_ref"
+            ],
+            "properties": {
+              "check_id": {
+                "type": "string"
+              },
+              "constraint_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "evidence_ref": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "diff_set": {
+      "type": "object",
+      "required": [
+        "base_ref",
+        "final_ref",
+        "files_changed",
+        "rationale"
+      ],
+      "properties": {
+        "base_ref": {
+          "type": "string"
+        },
+        "final_ref": {
+          "type": "string"
+        },
+        "files_changed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "path",
+              "change_type"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "change_type": {
+                "type": "string",
+                "enum": [
+                  "modified",
+                  "added",
+                  "deleted",
+                  "renamed"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "rationale": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "constraint_id",
+              "note"
+            ],
+            "properties": {
+              "constraint_id": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "final_green": {
+      "type": "object",
+      "required": [
+        "all_checks_passed",
+        "run_id",
+        "evidence_ref",
+        "summary_metrics"
+      ],
+      "properties": {
+        "all_checks_passed": {
+          "type": "boolean"
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "evidence_ref": {
+          "type": "string"
+        },
+        "summary_metrics": {
+          "type": "object",
+          "required": [
+            "duration_seconds",
+            "checks_executed"
+          ],
+          "properties": {
+            "duration_seconds": {
+              "type": "number"
+            },
+            "checks_executed": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "spec_delta": {
+      "type": "object",
+      "required": [
+        "changed",
+        "changes",
+        "human_decision"
+      ],
+      "properties": {
+        "changed": {
+          "type": "boolean"
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "id",
+              "before",
+              "after",
+              "reason"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "constraint",
+                  "check"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "before": {
+                "type": "string"
+              },
+              "after": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "human_decision": {
+          "type": "string",
+          "enum": [
+            "accepted",
+            "rejected",
+            "n/a"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "first_red": {
+            "properties": {
+              "occurred": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "first_red": {
+            "properties": {
+              "failing_checks": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "spec_delta": {
+            "properties": {
+              "changed": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "spec_delta": {
+            "properties": {
+              "human_decision": {
+                "enum": [
+                  "accepted",
+                  "rejected"
+                ]
+              },
+              "changes": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
