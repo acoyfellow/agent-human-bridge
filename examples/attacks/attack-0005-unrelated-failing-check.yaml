@@ -1,0 +1,69 @@
+audit_version: '1.0'
+work_id: ATTACK-0005-unrelated-failing-check
+timestamp_utc: '2026-01-21T23:00:00Z'
+repo_ref: example-repo@main
+actor:
+  human: you
+  agent: agent-x
+mini_spec:
+  summary: Implement user deletion with cascade delete of all related data
+  constraints:
+  - id: C1
+    statement: DELETE /api/users/:id endpoint removes user from database
+    type: functional
+  - id: C2
+    statement: All user-related records (posts, comments, sessions) are cascade deleted
+    type: functional
+  - id: C3
+    statement: Endpoint requires admin authentication with valid JWT
+    type: security
+  - id: C4
+    statement: Returns 404 if user not found, 403 if not admin, 204 on success
+    type: functional
+  - id: C5
+    statement: Deletion operation is atomic (all-or-nothing transaction)
+    type: invariant
+  out_of_scope:
+  - Soft delete functionality
+  - Audit log of deletions
+check_suite:
+  location: tests/test_users.py
+  run_command: pytest tests/test_users.py -v
+  environment: python3.11 + pytest + postgresql
+first_red:
+  occurred: true
+  failing_checks:
+  - check_id: test_code_style_line_length
+    constraint_ids:
+    - C1
+    evidence_ref: logs/first_red_style.txt
+diff_set:
+  base_ref: abc123
+  final_ref: def789
+  files_changed:
+  - path: api/users.py
+    change_type: modified
+  - path: tests/test_users.py
+    change_type: modified
+  rationale:
+  - constraint_id: C1
+    note: Added DELETE endpoint handler
+  - constraint_id: C2
+    note: Implemented cascade delete logic for related records
+  - constraint_id: C3
+    note: Added JWT authentication check
+  - constraint_id: C4
+    note: Added proper HTTP status codes
+  - constraint_id: C5
+    note: Wrapped deletion in database transaction
+final_green:
+  all_checks_passed: true
+  run_id: run-2026-01-21T23:00:00Z
+  evidence_ref: logs/final_green.txt
+  summary_metrics:
+    duration_seconds: 3.45
+    checks_executed: 15
+spec_delta:
+  changed: false
+  changes: []
+  human_decision: n/a
