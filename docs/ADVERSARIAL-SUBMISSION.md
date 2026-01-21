@@ -36,12 +36,13 @@ def check_failing_check_relevance(record: dict) -> list[str]:
         constraint_ids = fc.get('constraint_ids', [])
         
         # Heuristic: Check IDs should not be purely style/lint checks
-        # when mapped to functional/security/invariant constraints
-        style_keywords = ['style', 'format', 'lint', 'whitespace', 'line_length', 'indent']
+        # when mapped to functional/security/invariant/negative constraints
+        style_keywords = ['style', 'format', 'lint', 'whitespace', 'line_length', 'indent',
+                          'convention', 'naming', 'pylint', 'flake8', 'prettier', 'eslint']
         is_style_check = any(keyword in check_id.lower() for keyword in style_keywords)
         
         if is_style_check:
-            critical_types = ['functional', 'security', 'invariant']
+            critical_types = ['functional', 'security', 'invariant', 'negative']
             for cid in constraint_ids:
                 constraint = constraints_by_id.get(cid)
                 if constraint and constraint.get('type') in critical_types:
