@@ -1,10 +1,10 @@
 $ python tests/test_processor.py
 Running functional tests...
-✓ test_process_batch_functional
-✓ test_config_validation_functional
+[PASS] test_process_batch_functional
+[PASS] test_config_validation_functional
 
 Running performance test...
-✗ test_config_validation_performance: Config validation too slow: 0.0152s
+[FAIL] test_config_validation_performance: Config validation too slow: 0.0152s
 Traceback (most recent call last):
   File "tests/test_processor.py", line 69, in <module>
     test_config_validation_performance()

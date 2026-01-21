@@ -3,15 +3,15 @@
 ## Why the Current Validator Accepts This
 
 The workunit.yaml passes all current validator rules:
-- ✓ first_red.occurred is true
-- ✓ At least one failing check exists
-- ✓ Failing check is mapped to performance constraints (C3, C4)
-- ✓ final_green.all_checks_passed is true
-- ✓ spec_delta.changed is false
-- ✓ All constraints are properly typed
-- ✓ All required fields are present
+- [PASS] first_red.occurred is true
+- [PASS] At least one failing check exists
+- [PASS] Failing check is mapped to performance constraints (C3, C4)
+- [PASS] final_green.all_checks_passed is true
+- [PASS] spec_delta.changed is false
+- [PASS] All constraints are properly typed
+- [PASS] All required fields are present
 
-**Result: VALID** ✓
+**Result: VALID** [PASS]
 
 ## Why a Human Reviewer Should Reject This
 

@@ -54,15 +54,15 @@ def test_config_validation_performance():
 if __name__ == "__main__":
     print("Running functional tests...")
     test_process_batch_functional()
-    print("✓ test_process_batch_functional")
+    print("[PASS] test_process_batch_functional")
     
     test_config_validation_functional()
-    print("✓ test_config_validation_functional")
+    print("[PASS] test_config_validation_functional")
     
     print("\nRunning performance test...")
     try:
         test_config_validation_performance()
-        print("✓ test_config_validation_performance")
+        print("[PASS] test_config_validation_performance")
     except AssertionError as e:
-        print(f"✗ test_config_validation_performance: {e}")
+        print(f"[FAIL] test_config_validation_performance: {e}")
         raise

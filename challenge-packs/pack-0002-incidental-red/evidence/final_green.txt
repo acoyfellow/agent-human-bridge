@@ -1,10 +1,10 @@
 $ python tests/test_processor.py
 Running functional tests...
-✓ test_process_batch_functional
-✓ test_config_validation_functional
+[PASS] test_process_batch_functional
+[PASS] test_config_validation_functional
 
 Running performance test...
-✓ test_config_validation_performance
+[PASS] test_config_validation_performance
 
 All tests passed!
 Duration: 0.0089s (within threshold)

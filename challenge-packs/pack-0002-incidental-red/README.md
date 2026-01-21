@@ -2,8 +2,8 @@
 
 **Status:** Known false positive (intentional)  
 **Failure class:** Performance regression in a hot path  
-**Protocol verdict:** VALID ✓  
-**Human verdict:** SHOULD BE REJECTED ✗
+**Protocol verdict:** VALID [PASS]  
+**Human verdict:** SHOULD BE REJECTED [FAIL]
 
 ## What This Demonstrates
 
