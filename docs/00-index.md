@@ -8,3 +8,5 @@
 - 06 Adversarial tests — `06-adversarial-tests.md`
 - 07 North Star & runnable checkpoints — `07-north-star-and-roadmap.md`
 - 08 Relevance coupling — `08-relevance-coupling.md`
+
+- 09 Challenge Pack spec — `09-challenge-pack.md`
