@@ -1,0 +1,15 @@
+$ python tests/test_processor.py
+Running functional tests...
+[PASS] test_process_batch_functional
+[PASS] test_config_validation_functional
+
+Running performance test...
+[FAIL] test_config_validation_performance: Config validation too slow: 0.0152s
+Traceback (most recent call last):
+  File "tests/test_processor.py", line 69, in <module>
+    test_config_validation_performance()
+  File "tests/test_processor.py", line 52, in test_config_validation_performance
+    assert duration < 0.010, f"Config validation too slow: {duration:.4f}s"
+AssertionError: Config validation too slow: 0.0152s
+
+FAILED: test_config_validation_performance
