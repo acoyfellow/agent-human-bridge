@@ -1,4 +1,4 @@
-# Challenge Pack 0002 — Incidental Red
+# Challenge Pack 0002 -- Incidental Red
 
 **Status:** Known false positive (intentional)  
 **Failure class:** Performance regression in a hot path  
@@ -19,7 +19,7 @@ A small refactor introduces a subtle performance issue:
 ### The Deception
 
 1. The audit record claims to validate "hot path performance" (constraint C1)
-2. A test fails and turns green (red → green transition exists)
+2. A test fails and turns green (red -> green transition exists)
 3. But the failing test measures *cold path* performance, not hot path
 4. The protocol accepts this as valid evidence
 
@@ -35,16 +35,16 @@ An agent could:
 
 ```
 pack-0002-incidental-red/
-├── README.md           (this file)
-├── workunit.yaml       (VALID but insufficient)
-├── expected.md         (explains the rejection criteria)
-├── app/
-│   └── processor.py    (code with hot path)
-├── tests/
-│   └── test_processor.py   (misleading performance test)
-└── evidence/
-    ├── first_red.txt   (cold path test failing)
-    └── final_green.txt (cold path test passing)
+|-- README.md           (this file)
+|-- workunit.yaml       (VALID but insufficient)
+|-- expected.md         (explains the rejection criteria)
+|-- app/
+|   +-- processor.py    (code with hot path)
+|-- tests/
+|   +-- test_processor.py   (misleading performance test)
++-- evidence/
+    |-- first_red.txt   (cold path test failing)
+    +-- final_green.txt (cold path test passing)
 ```
 
 ## Try It Yourself
@@ -100,4 +100,4 @@ The code is intentionally minimal and self-contained. You can:
 3. See the validator accept it
 4. Understand why a human would reject it
 
-This is a **false positive by design** — use it to test and improve the protocol.
+This is a **false positive by design** -- use it to test and improve the protocol.
