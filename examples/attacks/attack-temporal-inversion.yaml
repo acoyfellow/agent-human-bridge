@@ -1,0 +1,57 @@
+# Attack: temporal-inversion
+# Validator behavior: REJECTED (timestamp_utc after run_id timestamp)
+# The record timestamp should not be after the final_green run_id timestamp.
+---
+audit_version: '1.0'
+work_id: ATTACK-temporal-inversion
+timestamp_utc: '2026-01-22T12:00:00Z'
+repo_ref: example-repo@main
+actor:
+  human: you
+  agent: time-travel-agent
+mini_spec:
+  summary: Fix data processing pipeline
+  constraints:
+  - id: C1
+    statement: Pipeline processes all records without error
+    type: functional
+  - id: C2
+    statement: Processing completes within 10 seconds
+    type: performance
+  out_of_scope:
+  - Error recovery
+check_suite:
+  location: tests/test_pipeline.py
+  run_command: pytest tests/test_pipeline.py -v
+  environment: python3.11 + pytest
+first_red:
+  occurred: true
+  failing_checks:
+  - check_id: test_pipeline_processing
+    constraint_ids:
+    - C1
+    - C2
+    evidence_ref: logs/first_red.txt
+    coupling: direct
+diff_set:
+  base_ref: abc123
+  final_ref: def789
+  files_changed:
+  - path: app/pipeline.py
+    change_type: modified
+  rationale:
+  - constraint_id: C1
+    note: Fixed record parsing logic
+  - constraint_id: C2
+    note: Optimized batch processing
+final_green:
+  all_checks_passed: true
+  run_id: run-2026-01-22T00:00:00Z
+  evidence_ref: logs/final_green.txt
+  summary_metrics:
+    duration_seconds: 5.2
+    checks_executed: 12
+spec_delta:
+  changed: false
+  changes: []
+  human_decision: n/a

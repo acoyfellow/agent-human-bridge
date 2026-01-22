@@ -140,7 +140,7 @@
     {
       "id": "009",
       "title": "Timestamp ordering validation",
-      "status": "pending",
+      "status": "completed",
       "priority": "P2",
       "description": "Ensure timestamps are internally consistent (first_red before final_green, etc).",
       "acceptance_criteria": [
@@ -156,7 +156,7 @@
     {
       "id": "010",
       "title": "Attack: temporal-inversion",
-      "status": "pending",
+      "status": "completed",
       "priority": "P2",
       "description": "Add attack where final_green timestamp predates first_red occurrence.",
       "acceptance_criteria": [
@@ -166,7 +166,7 @@
         "009"
       ],
       "test_file": "examples/attacks/attack-temporal-inversion.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-temporal-inversion.yaml"
+      "verification": "python tools/validate.py examples/attacks/attack-temporal-inversion.yaml 2>&1 | grep -q 'INVALID'"
     },
     {
       "id": "011",
