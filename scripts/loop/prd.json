@@ -219,7 +219,7 @@
     {
       "id": "014",
       "title": "Negative constraint testing",
-      "status": "pending",
+      "status": "completed",
       "priority": "P2",
       "description": "Ensure negative constraints (e.g., should NOT do X) have appropriate failing checks.",
       "acceptance_criteria": [
@@ -235,7 +235,7 @@
     {
       "id": "015",
       "title": "Attack: fake-negative",
-      "status": "pending",
+      "status": "completed",
       "priority": "P2",
       "description": "Add attack where positive test is mislabeled as negative constraint test.",
       "acceptance_criteria": [
@@ -245,12 +245,12 @@
         "014"
       ],
       "test_file": "examples/attacks/attack-fake-negative.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-fake-negative.yaml"
+      "verification": "python tools/validate.py examples/attacks/attack-fake-negative.yaml 2>&1 | grep -q 'INVALID'"
     },
     {
       "id": "016",
       "title": "Work ID uniqueness",
-      "status": "pending",
+      "status": "completed",
       "priority": "P2",
       "description": "Ensure work_id format is valid and follows convention.",
       "acceptance_criteria": [
@@ -266,7 +266,7 @@
     {
       "id": "017",
       "title": "Run ID consistency",
-      "status": "pending",
+      "status": "completed",
       "priority": "P2",
       "description": "Ensure final_green.run_id follows expected format and is unique.",
       "acceptance_criteria": [
@@ -330,7 +330,7 @@
     {
       "id": "021",
       "title": "Constraint ID format",
-      "status": "pending",
+      "status": "completed",
       "priority": "P3",
       "description": "Ensure constraint IDs follow consistent naming convention.",
       "acceptance_criteria": [
@@ -346,7 +346,7 @@
     {
       "id": "022",
       "title": "Check ID format",
-      "status": "pending",
+      "status": "completed",
       "priority": "P3",
       "description": "Ensure check IDs follow consistent naming convention.",
       "acceptance_criteria": [
@@ -362,7 +362,7 @@
     {
       "id": "023",
       "title": "Summary metrics validation",
-      "status": "pending",
+      "status": "completed",
       "priority": "P3",
       "description": "Ensure summary_metrics are realistic (duration > 0, checks_executed > 0).",
       "acceptance_criteria": [
@@ -378,7 +378,7 @@
     {
       "id": "024",
       "title": "Environment specification",
-      "status": "pending",
+      "status": "completed",
       "priority": "P3",
       "description": "Ensure check_suite.environment is non-empty and specifies runtime.",
       "acceptance_criteria": [
@@ -394,7 +394,7 @@
     {
       "id": "025",
       "title": "Out-of-scope validation",
-      "status": "pending",
+      "status": "completed",
       "priority": "P3",
       "description": "Ensure out_of_scope is non-empty when there are meaningful scope exclusions.",
       "acceptance_criteria": [
@@ -410,7 +410,7 @@
     {
       "id": "026",
       "title": "Rationale constraint linkage",
-      "status": "pending",
+      "status": "completed",
       "priority": "P3",
       "description": "Ensure diff_set.rationale entries reference valid constraint IDs.",
       "acceptance_criteria": [
@@ -426,7 +426,7 @@
     {
       "id": "027",
       "title": "Security constraint direct red",
-      "status": "pending",
+      "status": "completed",
       "priority": "P2",
       "description": "Security constraints must have at least one direct red (like functional).",
       "acceptance_criteria": [

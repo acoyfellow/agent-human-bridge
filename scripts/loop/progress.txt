@@ -5,3 +5,87 @@ This file tracks completed iterations, failures, learnings, and footguns encount
 Format: One entry per completed or failed story.
 - Records learnings, failure modes, and footguns
 COMPLETE: Story 001 - Schema validity guardrail
+FAIL: Story 002 verification failed
+Output: INVALID
+
+- Constraints ['C1', 'C2', 'C3', 'C4'] lack a direct red (required for functional, negative, or performance types)
+
+COMPLETE: Story 002 - Relevance coupling enforcement
+COMPLETE: Story 003 - Attack: misleading-direct
+FAIL: Story 004 - test_file examples/attacks/attack-indirect-omission.yaml does not exist
+FAIL: Story 004 verification failed
+Output: INVALID
+
+- Constraints ['C1'] lack a direct red (required for functional, negative, or performance types)
+
+COMPLETE: Story 004 - Attack: indirect-omission
+COMPLETE: Story 005 - Evidence file existence
+FAIL: Story 006 - test_file examples/attacks/attack-missing-evidence.yaml does not exist
+FAIL: Story 006 verification failed
+Output: INVALID
+
+- first_red.test_login_invalid_credentials: evidence_ref 'logs/nonexistent_first_red.txt' does not exist on disk
+- first_red.test_login_valid_credentials: evidence_ref 'logs/nonexistent_first_red.txt' does not exist on disk
+- final_green: evidence_ref 'logs/nonexistent_final_green.txt' does not exist on disk
+
+COMPLETE: Story 006 - Attack: missing-evidence
+COMPLETE: Story 007 - Constraint coverage enforcement
+FAIL: Story 008 - test_file examples/attacks/attack-uncovered-constraint.yaml does not exist
+FAIL: Story 008 verification failed
+Output: INVALID
+
+- Constraints ['C2', 'C3'] lack a direct red (required for functional, negative, or performance types)
+- Constraints ['C2', 'C3'] have no failing check mapped to them
+
+COMPLETE: Story 008 - Attack: uncovered-constraint
+FAIL: Story 002 verification failed
+Output: INVALID
+
+- Constraints ['C1', 'C2', 'C3', 'C4'] lack a direct red (required for functional, negative, or performance types)
+- Constraints ['C1', 'C2'] have no failing check mapped to them
+
+FAIL: Story 012 verification failed
+Output: INVALID
+
+- Constraints ['C3'] have no failing check mapped to them
+
+COMPLETE: Story 012 - Human decision enforcement
+COMPLETE: Story 018 - Empty failing checks guard
+FAIL: Story 019 - test_file challenge-packs/pack-0001-no-red/workunit.yaml does not exist
+FAIL: Story 019 verification failed
+Output: INVALID
+
+- first_red.occurred must be true (no red without green)
+- Constraints ['C1', 'C2'] lack a direct red (required for functional, negative, or performance types)
+- Constraints ['C1', 'C2'] have no failing check mapped to them
+- final_green: evidence_ref 'evidence/final_green.txt' does not exist on disk
+
+COMPLETE: Story 019 - No-red rejection
+COMPLETE: Story 020 - Green check enforcement
+COMPLETE: Story 009 - Timestamp ordering validation
+FAIL: Story 010 - test_file examples/attacks/attack-temporal-inversion.yaml does not exist
+COMPLETE: Story 010 - Attack: temporal-inversion
+COMPLETE: Story 011 - Diff file existence
+FAIL: Story 013 - test_file examples/attacks/attack-spec-drift.yaml does not exist
+COMPLETE: Story 013 - Attack: spec-drift
+COMPLETE: Story 014 - Negative constraint testing
+FAIL: Story 015 - test_file examples/attacks/attack-fake-negative.yaml does not exist
+FAIL: Story 015 verification failed
+Output: INVALID
+
+- Constraints ['C1'] lack a direct red (required for functional, negative, or performance types)
+- Constraints ['C1'] have no failing check mapped to them
+- first_red.test_valid_input_accepted: evidence_ref 'logs/first_red.txt' does not exist on disk
+- final_green: evidence_ref 'logs/final_green.txt' does not exist on disk
+
+COMPLETE: Story 015 - Attack: fake-negative
+COMPLETE: Story 016 - Work ID uniqueness
+COMPLETE: Story 017 - Run ID consistency
+COMPLETE: Story 027 - Security constraint direct red
+COMPLETE: Story 021 - Constraint ID format
+COMPLETE: Story 022 - Check ID format
+COMPLETE: Story 023 - Summary metrics validation
+COMPLETE: Story 024 - Environment specification
+COMPLETE: Story 025 - Out-of-scope validation
+COMPLETE: Story 026 - Rationale constraint linkage
+STOP: No eligible pending story found

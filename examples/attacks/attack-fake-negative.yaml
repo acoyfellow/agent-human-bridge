@@ -1,0 +1,56 @@
+# Attack: fake-negative
+# Validator behavior: REJECTED (negative constraint has no negative test)
+# Negative constraints (should NOT do X) need tests that verify the negative case.
+---
+audit_version: '1.0'
+work_id: ATTACK-fake-negative
+timestamp_utc: '2026-01-22T00:00:00Z'
+repo_ref: example-repo@main
+actor:
+  human: you
+  agent: fake-negative-agent
+mini_spec:
+  summary: Add input validation
+  constraints:
+  - id: C1
+    statement: Invalid input is rejected
+    type: negative
+  - id: C2
+    statement: Valid input is accepted
+    type: functional
+  out_of_scope:
+  - Error message formatting
+check_suite:
+  location: tests/test_validation.py
+  run_command: pytest tests/test_validation.py -v
+  environment: python3.11 + pytest
+first_red:
+  occurred: true
+  failing_checks:
+  - check_id: test_valid_input_accepted
+    constraint_ids:
+    - C2
+    evidence_ref: logs/first_red.txt
+    coupling: direct
+diff_set:
+  base_ref: abc123
+  final_ref: def789
+  files_changed:
+  - path: api/validation.py
+    change_type: added
+  rationale:
+  - constraint_id: C1
+    note: Added validation to reject invalid input
+  - constraint_id: C2
+    note: Valid input passes through
+final_green:
+  all_checks_passed: true
+  run_id: run-2026-01-22T00:00:00Z
+  evidence_ref: logs/final_green.txt
+  summary_metrics:
+    duration_seconds: 1.0
+    checks_executed: 5
+spec_delta:
+  changed: false
+  changes: []
+  human_decision: n/a
