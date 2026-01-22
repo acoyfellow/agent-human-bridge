@@ -1,0 +1,61 @@
+# Attack: spec-drift
+# Validator behavior: REJECTED (spec_delta.changed=true but human_decision=n/a)
+# When constraints change, human must accept or reject.
+---
+audit_version: '1.0'
+work_id: ATTACK-spec-drift
+timestamp_utc: '2026-01-22T00:00:00Z'
+repo_ref: example-repo@main
+actor:
+  human: you
+  agent: drift-agent
+mini_spec:
+  summary: Add new authentication method
+  constraints:
+  - id: C1
+    statement: Login with email and password works
+    type: functional
+  - id: C2
+    statement: Login with OAuth works
+    type: functional
+  out_of_scope:
+  - Password reset
+check_suite:
+  location: tests/test_auth.py
+  run_command: pytest tests/test_auth.py -v
+  environment: python3.11 + pytest
+first_red:
+  occurred: true
+  failing_checks:
+  - check_id: test_oauth_login
+    constraint_ids:
+    - C2
+    evidence_ref: logs/first_red.txt
+    coupling: direct
+diff_set:
+  base_ref: abc123
+  final_ref: def789
+  files_changed:
+  - path: api/auth.py
+    change_type: modified
+  rationale:
+  - constraint_id: C1
+    note: No changes to email login
+  - constraint_id: C2
+    note: Added OAuth integration
+final_green:
+  all_checks_passed: true
+  run_id: run-2026-01-22T00:00:00Z
+  evidence_ref: logs/final_green.txt
+  summary_metrics:
+    duration_seconds: 3.5
+    checks_executed: 8
+spec_delta:
+  changed: true
+  changes:
+  - kind: constraint
+    id: C2
+    before: ""
+    after: "Login with OAuth works"
+    reason: "Added OAuth as a new login method"
+  human_decision: n/a

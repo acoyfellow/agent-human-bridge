@@ -171,7 +171,7 @@
     {
       "id": "011",
       "title": "Diff file existence",
-      "status": "pending",
+      "status": "completed",
       "priority": "P2",
       "description": "Ensure files listed in diff_set actually exist in the repository.",
       "acceptance_criteria": [
@@ -204,7 +204,7 @@
     {
       "id": "013",
       "title": "Attack: spec-drift",
-      "status": "pending",
+      "status": "completed",
       "priority": "P2",
       "description": "Add attack where constraints change without proper spec_delta documentation.",
       "acceptance_criteria": [
@@ -214,7 +214,7 @@
         "012"
       ],
       "test_file": "examples/attacks/attack-spec-drift.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-spec-drift.yaml"
+      "verification": "python tools/validate.py examples/attacks/attack-spec-drift.yaml 2>&1 | grep -q 'INVALID'"
     },
     {
       "id": "014",
