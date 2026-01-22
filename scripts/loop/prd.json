@@ -298,7 +298,7 @@
     {
       "id": "019",
       "title": "No-red rejection",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "Reject workunits where first_red.occurred is false (no red before green).",
       "acceptance_criteria": [
@@ -309,7 +309,7 @@
         "001"
       ],
       "test_file": "challenge-packs/pack-0001-no-red/workunit.yaml",
-      "verification": "python tools/validate.py challenge-packs/pack-0001-no-red/workunit.yaml"
+      "verification": "python tools/validate.py challenge-packs/pack-0001-no-red/workunit.yaml 2>&1 | grep -q 'INVALID' && python tools/validate.py examples/golden-record.yaml 2>&1 | grep -q 'VALID'"
     },
     {
       "id": "020",
