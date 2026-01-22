@@ -1,6 +1,6 @@
 # Agent–Human Bridge Spec (AHS)
 
-A small, auditable protocol (v2: stricter schema + adversarial tests) for **agent-mediated software building** that can pass a **human safety review** without relying on “trust in AI”.
+A small, auditable protocol for **agent-mediated software building** that can pass a **human safety review** without relying on “trust in AI”.
 
 This repo contains:
 - A **state machine** describing the workflow

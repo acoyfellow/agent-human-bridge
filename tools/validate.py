@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AHS validator (v2)
+AHS validator
 
 Validates:
 1) JSON Schema (schemas/ahs-audit.schema.json)

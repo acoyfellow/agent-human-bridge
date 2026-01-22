@@ -17,7 +17,7 @@ This workflow is a simple state machine where **each transition produces or requ
 ## Diagram (Mermaid)
 
 ```mermaid
-stateDiagram-v2
+stateDiagram
     [*] --> S0
     S0 --> S1: define_constraints
     S1 --> S2: run_checks
