@@ -1,0 +1,55 @@
+# Attack: indirect-omission
+# Validator behavior: REJECTED (direct evidence exists for critical constraint)
+# When direct evidence exists for a functional/negative/performance constraint,
+# labeling it as "indirect" is rejected because the constraint requires direct red.
+---
+audit_version: '1.0'
+work_id: ATTACK-indirect-omission
+timestamp_utc: '2026-01-22T00:00:00Z'
+repo_ref: example-repo@main
+actor:
+  human: you
+  agent: evasive-agent
+mini_spec:
+  summary: Add rate limiting to API endpoints
+  constraints:
+  - id: C1
+    statement: API rejects requests exceeding 1000 req/min from single IP
+    type: functional
+  - id: C2
+    statement: Rate limiting does not affect authorized service-to-service calls
+    type: compatibility
+  out_of_scope:
+  - Adding authentication new features
+check_suite:
+  location: tests/test_rate_limit.py
+  run_command: pytest tests/test_rate_limit.py -v
+  environment: python3.11 + pytest
+first_red:
+  occurred: true
+  failing_checks:
+  - check_id: test_rate_limit_enforcement
+    constraint_ids:
+    - C1
+    evidence_ref: logs/first_red.txt
+    coupling: indirect
+diff_set:
+  base_ref: abc123
+  final_ref: def789
+  files_changed:
+  - path: api/rate_limit.py
+    change_type: added
+  rationale:
+  - constraint_id: C1
+    note: Implemented token bucket algorithm for rate limiting
+final_green:
+  all_checks_passed: true
+  run_id: run-2026-01-22T00:00:00Z
+  evidence_ref: logs/final_green.txt
+  summary_metrics:
+    duration_seconds: 1.5
+    checks_executed: 5
+spec_delta:
+  changed: false
+  changes: []
+  human_decision: n/a

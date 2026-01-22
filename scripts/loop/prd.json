@@ -46,7 +46,7 @@
     {
       "id": "003",
       "title": "Attack: misleading-direct",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "Add an adversarial record that labels a failing check as direct even though a human would dispute it.",
       "acceptance_criteria": [
@@ -62,7 +62,7 @@
     {
       "id": "004",
       "title": "Attack: indirect-omission",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "Add attack where direct evidence exists but agent labels it indirect to avoid scrutiny.",
       "acceptance_criteria": [
@@ -73,7 +73,7 @@
         "002"
       ],
       "test_file": "examples/attacks/attack-indirect-omission.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-indirect-omission.yaml"
+      "verification": "python tools/validate.py examples/attacks/attack-indirect-omission.yaml 2>&1 | grep -q 'INVALID'"
     },
     {
       "id": "005",
