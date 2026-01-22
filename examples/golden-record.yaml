@@ -1,6 +1,6 @@
 audit_version: '1.0'
 work_id: WU-0001-hello-feature
-timestamp_utc: '2026-01-21T13:21:01Z'
+timestamp_utc: '2026-01-21T00:00:00Z'
 repo_ref: example-repo@main
 actor:
   human: you

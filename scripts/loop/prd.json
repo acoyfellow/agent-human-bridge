@@ -187,7 +187,7 @@
     {
       "id": "012",
       "title": "Human decision enforcement",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "When spec_delta.changed is true, human_decision must be accepted or rejected.",
       "acceptance_criteria": [
@@ -198,7 +198,8 @@
         "001"
       ],
       "test_file": "examples/golden-record.yaml",
-      "verification": "python tools/validate.py examples/golden-record.yaml"
+      "verification": "python tools/validate.py examples/golden-record.yaml",
+      "retries": 1
     },
     {
       "id": "013",

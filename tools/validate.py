@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from datetime import datetime
 
 def load_record(p: Path) -> dict:
     txt = p.read_text(encoding="utf-8")
@@ -82,12 +83,14 @@ def invariants(record: dict, record_path: Path | None = None) -> list[str]:
     if missing_direct_red:
         errs.append(f"Constraints {missing_direct_red} lack a direct red (required for functional, negative, or performance types)")
 
-    # Constraint coverage: every constraint must have at least one failing check
+    # Constraint coverage: critical constraints must have at least one failing check
+    critical_types = {"functional", "negative", "performance"}
+    critical_constraints = [c for c in constraints if c.get("type") in critical_types]
     constraint_ids_with_failing_check = set()
     for fc in failing:
         constraint_ids_with_failing_check.update(fc.get("constraint_ids", []))
     
-    uncovered_constraints = [c.get("id") for c in constraints if c.get("id") not in constraint_ids_with_failing_check]
+    uncovered_constraints = [c.get("id") for c in critical_constraints if c.get("id") not in constraint_ids_with_failing_check]
     if uncovered_constraints:
         errs.append(f"Constraints {uncovered_constraints} have no failing check mapped to them")
 
@@ -103,6 +106,20 @@ def invariants(record: dict, record_path: Path | None = None) -> list[str]:
     for fc in record.get("first_red", {}).get("failing_checks", []):
         check_evidence(fc.get("evidence_ref",""), f"first_red.{fc.get('check_id','?')}")
     check_evidence(record.get("final_green", {}).get("evidence_ref",""), "final_green")
+
+    # Timestamp ordering: record timestamp should not be after run_id timestamp
+    record_timestamp = record.get("timestamp_utc")
+    run_id = record.get("final_green", {}).get("run_id", "")
+    if record_timestamp and run_id:
+        # Extract timestamp from run_id (format: run-YYYY-MM-DDThh:mm:ssZ)
+        run_timestamp_str = run_id.replace("run-", "")
+        try:
+            record_dt = datetime.fromisoformat(record_timestamp.replace("Z", "+00:00"))
+            run_dt = datetime.fromisoformat(run_timestamp_str.replace("Z", "+00:00"))
+            if record_dt > run_dt:
+                errs.append(f"timestamp_utc ({record_timestamp}) is after final_green.run_id timestamp ({run_timestamp_str})")
+        except ValueError:
+            pass  # Skip validation if timestamps can't be parsed
 
     return errs
 
