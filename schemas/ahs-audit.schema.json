@@ -140,7 +140,8 @@
             "required": [
               "check_id",
               "constraint_ids",
-              "evidence_ref"
+              "evidence_ref",
+              "coupling"
             ],
             "properties": {
               "check_id": {
@@ -154,6 +155,14 @@
               },
               "evidence_ref": {
                 "type": "string"
+              },
+              "coupling": {
+                "type": "string",
+                "enum": [
+                  "direct",
+                  "indirect",
+                  "incidental"
+                ]
               }
             },
             "additionalProperties": false

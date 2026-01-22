@@ -36,6 +36,7 @@ first_red:
     - C3
     - C4
     evidence_ref: evidence/first_red.txt
+    coupling: indirect
 diff_set:
   base_ref: a1b2c3d
   final_ref: e4f5g6h
