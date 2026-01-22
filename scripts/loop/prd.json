@@ -78,7 +78,7 @@
     {
       "id": "005",
       "title": "Evidence file existence",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "Ensure evidence_ref paths actually exist on disk relative to workunit location.",
       "acceptance_criteria": [
