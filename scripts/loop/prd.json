@@ -58,6 +58,385 @@
       ],
       "test_file": "examples/attacks/attack-misleading-direct.yaml",
       "verification": "python tools/validate.py examples/attacks/attack-misleading-direct.yaml"
+    },
+    {
+      "id": "004",
+      "title": "Attack: indirect-omission",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Add attack where direct evidence exists but agent labels it indirect to avoid scrutiny.",
+      "acceptance_criteria": [
+        "Attack record exists",
+        "Validator rejects when direct evidence exists for critical constraint"
+      ],
+      "dependencies": [
+        "002"
+      ],
+      "test_file": "examples/attacks/attack-indirect-omission.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-indirect-omission.yaml"
+    },
+    {
+      "id": "005",
+      "title": "Evidence file existence",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Ensure evidence_ref paths actually exist on disk relative to workunit location.",
+      "acceptance_criteria": [
+        "Non-existent evidence_ref causes INVALID",
+        "Golden record passes (all refs exist)"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "006",
+      "title": "Attack: missing-evidence",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Add attack where workunit claims evidence exists at path but file is missing.",
+      "acceptance_criteria": [
+        "Attack record rejected for missing evidence file"
+      ],
+      "dependencies": [
+        "005"
+      ],
+      "test_file": "examples/attacks/attack-missing-evidence.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-missing-evidence.yaml"
+    },
+    {
+      "id": "007",
+      "title": "Constraint coverage enforcement",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Ensure every constraint has at least one failing check mapped to it in first_red.",
+      "acceptance_criteria": [
+        "Workunit with uncovered constraint is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "008",
+      "title": "Attack: uncovered-constraint",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Add attack where constraints exist but no failing checks reference them.",
+      "acceptance_criteria": [
+        "Attack record rejected for uncovered constraint"
+      ],
+      "dependencies": [
+        "007"
+      ],
+      "test_file": "examples/attacks/attack-uncovered-constraint.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-uncovered-constraint.yaml"
+    },
+    {
+      "id": "009",
+      "title": "Timestamp ordering validation",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Ensure timestamps are internally consistent (first_red before final_green, etc).",
+      "acceptance_criteria": [
+        "Workunit with out-of-order timestamps is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "010",
+      "title": "Attack: temporal-inversion",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Add attack where final_green timestamp predates first_red occurrence.",
+      "acceptance_criteria": [
+        "Attack record rejected for temporal inversion"
+      ],
+      "dependencies": [
+        "009"
+      ],
+      "test_file": "examples/attacks/attack-temporal-inversion.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-temporal-inversion.yaml"
+    },
+    {
+      "id": "011",
+      "title": "Diff file existence",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Ensure files listed in diff_set actually exist in the repository.",
+      "acceptance_criteria": [
+        "Workunit with non-existent file in diff_set is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "012",
+      "title": "Human decision enforcement",
+      "status": "pending",
+      "priority": "P1",
+      "description": "When spec_delta.changed is true, human_decision must be accepted or rejected.",
+      "acceptance_criteria": [
+        "Workunit with changed spec and n/a decision is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "013",
+      "title": "Attack: spec-drift",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Add attack where constraints change without proper spec_delta documentation.",
+      "acceptance_criteria": [
+        "Attack record rejected for undocumented constraint change"
+      ],
+      "dependencies": [
+        "012"
+      ],
+      "test_file": "examples/attacks/attack-spec-drift.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-spec-drift.yaml"
+    },
+    {
+      "id": "014",
+      "title": "Negative constraint testing",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Ensure negative constraints (e.g., should NOT do X) have appropriate failing checks.",
+      "acceptance_criteria": [
+        "Workunit with negative constraint but no negative test is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "015",
+      "title": "Attack: fake-negative",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Add attack where positive test is mislabeled as negative constraint test.",
+      "acceptance_criteria": [
+        "Attack record rejected for mislabeled negative test"
+      ],
+      "dependencies": [
+        "014"
+      ],
+      "test_file": "examples/attacks/attack-fake-negative.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-fake-negative.yaml"
+    },
+    {
+      "id": "016",
+      "title": "Work ID uniqueness",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Ensure work_id format is valid and follows convention.",
+      "acceptance_criteria": [
+        "Workunit with malformed work_id is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "017",
+      "title": "Run ID consistency",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Ensure final_green.run_id follows expected format and is unique.",
+      "acceptance_criteria": [
+        "Workunit with malformed run_id is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "018",
+      "title": "Empty failing checks guard",
+      "status": "pending",
+      "priority": "P1",
+      "description": "When first_red.occurred is true, failing_checks must be non-empty.",
+      "acceptance_criteria": [
+        "Workunit with occurred=true but empty failing_checks is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "019",
+      "title": "No-red rejection",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Reject workunits where first_red.occurred is false (no red before green).",
+      "acceptance_criteria": [
+        "Pack-0001 (no-red) is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "challenge-packs/pack-0001-no-red/workunit.yaml",
+      "verification": "python tools/validate.py challenge-packs/pack-0001-no-red/workunit.yaml"
+    },
+    {
+      "id": "020",
+      "title": "Green check enforcement",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Reject workunits where final_green.all_checks_passed is false.",
+      "acceptance_criteria": [
+        "Workunit with all_checks_passed=false is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "021",
+      "title": "Constraint ID format",
+      "status": "pending",
+      "priority": "P3",
+      "description": "Ensure constraint IDs follow consistent naming convention.",
+      "acceptance_criteria": [
+        "Workunit with malformed constraint ID is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "022",
+      "title": "Check ID format",
+      "status": "pending",
+      "priority": "P3",
+      "description": "Ensure check IDs follow consistent naming convention.",
+      "acceptance_criteria": [
+        "Workunit with malformed check ID is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "023",
+      "title": "Summary metrics validation",
+      "status": "pending",
+      "priority": "P3",
+      "description": "Ensure summary_metrics are realistic (duration > 0, checks_executed > 0).",
+      "acceptance_criteria": [
+        "Workunit with invalid metrics is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "024",
+      "title": "Environment specification",
+      "status": "pending",
+      "priority": "P3",
+      "description": "Ensure check_suite.environment is non-empty and specifies runtime.",
+      "acceptance_criteria": [
+        "Workunit with empty environment is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "025",
+      "title": "Out-of-scope validation",
+      "status": "pending",
+      "priority": "P3",
+      "description": "Ensure out_of_scope is non-empty when there are meaningful scope exclusions.",
+      "acceptance_criteria": [
+        "Workunit with empty out_of_scope when needed is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "026",
+      "title": "Rationale constraint linkage",
+      "status": "pending",
+      "priority": "P3",
+      "description": "Ensure diff_set.rationale entries reference valid constraint IDs.",
+      "acceptance_criteria": [
+        "Workunit with invalid constraint ID in rationale is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "027",
+      "title": "Security constraint direct red",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Security constraints must have at least one direct red (like functional).",
+      "acceptance_criteria": [
+        "Workunit with security constraint but indirect red is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "002"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
     }
   ]
 }
