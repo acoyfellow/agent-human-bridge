@@ -125,7 +125,7 @@
     {
       "id": "008",
       "title": "Attack: uncovered-constraint",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "Add attack where constraints exist but no failing checks reference them.",
       "acceptance_criteria": [
@@ -135,7 +135,7 @@
         "007"
       ],
       "test_file": "examples/attacks/attack-uncovered-constraint.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-uncovered-constraint.yaml"
+      "verification": "python tools/validate.py examples/attacks/attack-uncovered-constraint.yaml 2>&1 | grep -q 'INVALID'"
     },
     {
       "id": "009",

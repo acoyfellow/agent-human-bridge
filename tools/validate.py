@@ -82,6 +82,15 @@ def invariants(record: dict, record_path: Path | None = None) -> list[str]:
     if missing_direct_red:
         errs.append(f"Constraints {missing_direct_red} lack a direct red (required for functional, negative, or performance types)")
 
+    # Constraint coverage: every constraint must have at least one failing check
+    constraint_ids_with_failing_check = set()
+    for fc in failing:
+        constraint_ids_with_failing_check.update(fc.get("constraint_ids", []))
+    
+    uncovered_constraints = [c.get("id") for c in constraints if c.get("id") not in constraint_ids_with_failing_check]
+    if uncovered_constraints:
+        errs.append(f"Constraints {uncovered_constraints} have no failing check mapped to them")
+
     # Evidence refs must exist on disk if they look like local paths
     def check_evidence(ref: str, label: str):
         if not ref or "://" in ref:

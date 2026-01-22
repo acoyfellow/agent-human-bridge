@@ -1,0 +1,57 @@
+# Attack: uncovered-constraint
+# Validator behavior: REJECTED (constraint has no failing check mapped to it)
+# Every constraint should have at least one failing check that exercises it.
+---
+audit_version: '1.0'
+work_id: ATTACK-uncovered-constraint
+timestamp_utc: '2026-01-22T00:00:00Z'
+repo_ref: example-repo@main
+actor:
+  human: you
+  agent: sloppy-agent
+mini_spec:
+  summary: Add user profile feature
+  constraints:
+  - id: C1
+    statement: User can view their own profile
+    type: functional
+  - id: C2
+    statement: User can edit their own profile
+    type: functional
+  - id: C3
+    statement: User cannot edit other users' profiles
+    type: negative
+  out_of_scope:
+  - Profile picture upload
+check_suite:
+  location: tests/test_profile.py
+  run_command: pytest tests/test_profile.py -v
+  environment: python3.11 + pytest
+first_red:
+  occurred: true
+  failing_checks:
+  - check_id: test_view_own_profile
+    constraint_ids:
+    - C1
+    evidence_ref: ../logs/first_red.txt
+    coupling: direct
+diff_set:
+  base_ref: abc123
+  final_ref: def789
+  files_changed:
+  - path: api/profile.py
+    change_type: added
+  rationale:
+  - constraint_id: C1
+    note: Added profile viewing endpoint
+final_green:
+  all_checks_passed: true
+  run_id: run-2026-01-22T00:00:00Z
+  evidence_ref: ../logs/final_green.txt
+  summary_metrics:
+    duration_seconds: 1.2
+    checks_executed: 6
+spec_delta:
+  changed: false
+  changes: []
+  human_decision: n/a
