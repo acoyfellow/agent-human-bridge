@@ -33,7 +33,14 @@ first_red:
   - check_id: test_health_returns_200
     constraint_ids:
     - C1
+    - C2
     evidence_ref: logs/first_red.txt
+    coupling: direct
+  - check_id: test_health_rejects_non_get
+    constraint_ids:
+    - C4
+    evidence_ref: logs/first_red.txt
+    coupling: direct
 diff_set:
   base_ref: abc123
   final_ref: def456

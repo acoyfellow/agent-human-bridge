@@ -34,6 +34,7 @@ first_red:
     constraint_ids:
     - C1
     evidence_ref: logs/first_red.txt
+    coupling: direct
 diff_set:
   base_ref: abc123
   final_ref: def456

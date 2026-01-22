@@ -65,6 +65,23 @@ def invariants(record: dict) -> list[str]:
         if not spec_delta.get("changes"):
             errs.append("spec_delta.changes must be non-empty when spec_delta.changed is true")
 
+    # Direct red rule: functional, negative, or performance constraints must have at least one direct red
+    critical_types = {"functional", "negative", "performance"}
+    critical_constraints = [c for c in constraints if c.get("type") in critical_types]
+    
+    # Build set of constraint IDs that have direct reds
+    direct_red_constraint_ids = set()
+    for fc in failing:
+        if fc.get("coupling") == "direct":
+            direct_red_constraint_ids.update(fc.get("constraint_ids", []))
+    
+    # Check which critical constraints lack direct reds
+    missing_direct_red = [c.get("id") for c in critical_constraints 
+                          if c.get("id") not in direct_red_constraint_ids]
+    
+    if missing_direct_red:
+        errs.append(f"Constraints {missing_direct_red} lack a direct red (required for functional, negative, or performance types)")
+
     return errs
 
 def strict_checks(record: dict, record_path: Path) -> list[str]:
