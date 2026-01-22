@@ -30,7 +30,7 @@
     {
       "id": "002",
       "title": "Relevance coupling enforcement",
-      "status": "pending",
+      "status": "completed",
       "priority": "P0",
       "description": "Enforce direct coupling so incidental red no longer satisfies performance constraints.",
       "acceptance_criteria": [
@@ -41,7 +41,7 @@
         "001"
       ],
       "test_file": "challenge-packs/pack-0002-incidental-red/workunit.yaml",
-      "verification": "python tools/validate.py challenge-packs/pack-0002-incidental-red/workunit.yaml"
+      "verification": "python tools/validate.py challenge-packs/pack-0002-incidental-red/workunit.yaml 2>&1 | grep -q 'INVALID' && python tools/validate.py examples/golden-record.yaml 2>&1 | grep -q 'VALID'"
     },
     {
       "id": "003",
