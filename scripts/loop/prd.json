@@ -12,6 +12,7 @@
   "stories": [
     {
       "id": "001",
+      "category": "observe_baseline",
       "title": "Schema validity guardrail",
       "status": "completed",
       "priority": "P0",
@@ -20,63 +21,12 @@
         "schemas/ahs-audit.schema.json parses as valid JSON"
       ],
       "dependencies": [],
-      "files_to_modify": [
-        "scripts/loop/run.py",
-        "scripts/loop/README.md"
-      ],
       "test_file": "schemas/ahs-audit.schema.json",
       "verification": "python -m json.tool schemas/ahs-audit.schema.json > /dev/null"
     },
     {
-      "id": "002",
-      "title": "Relevance coupling enforcement",
-      "status": "completed",
-      "priority": "P0",
-      "description": "Enforce direct coupling so incidental red no longer satisfies performance constraints.",
-      "acceptance_criteria": [
-        "Pack-0002 is INVALID",
-        "Golden record remains VALID"
-      ],
-      "dependencies": [
-        "001"
-      ],
-      "test_file": "challenge-packs/pack-0002-incidental-red/workunit.yaml",
-      "verification": "python tools/validate.py challenge-packs/pack-0002-incidental-red/workunit.yaml 2>&1 | grep -q 'INVALID' && python tools/validate.py examples/golden-record.yaml 2>&1 | grep -q 'VALID'"
-    },
-    {
-      "id": "003",
-      "title": "Attack: misleading-direct",
-      "status": "completed",
-      "priority": "P1",
-      "description": "Add an adversarial record that labels a failing check as direct even though a human would dispute it.",
-      "acceptance_criteria": [
-        "Attack record exists",
-        "Validator behavior is documented"
-      ],
-      "dependencies": [
-        "002"
-      ],
-      "test_file": "examples/attacks/attack-misleading-direct.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-misleading-direct.yaml"
-    },
-    {
-      "id": "004",
-      "title": "Attack: indirect-omission",
-      "status": "completed",
-      "priority": "P1",
-      "description": "Add attack where direct evidence exists but agent labels it indirect to avoid scrutiny.",
-      "acceptance_criteria": [
-        "Attack record exists",
-        "Validator rejects when direct evidence exists for critical constraint"
-      ],
-      "dependencies": [
-        "002"
-      ],
-      "test_file": "examples/attacks/attack-indirect-omission.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-indirect-omission.yaml 2>&1 | grep -q 'INVALID'"
-    },
-    {
       "id": "005",
+      "category": "observe_baseline",
       "title": "Evidence file existence",
       "status": "completed",
       "priority": "P1",
@@ -92,22 +42,8 @@
       "verification": "python tools/validate.py examples/golden-record.yaml"
     },
     {
-      "id": "006",
-      "title": "Attack: missing-evidence",
-      "status": "completed",
-      "priority": "P1",
-      "description": "Add attack where workunit claims evidence exists at path but file is missing.",
-      "acceptance_criteria": [
-        "Attack record rejected for missing evidence file"
-      ],
-      "dependencies": [
-        "005"
-      ],
-      "test_file": "examples/attacks/attack-missing-evidence.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-missing-evidence.yaml 2>&1 | grep -q 'INVALID'"
-    },
-    {
       "id": "007",
+      "category": "observe_baseline",
       "title": "Constraint coverage enforcement",
       "status": "completed",
       "priority": "P1",
@@ -123,22 +59,8 @@
       "verification": "python tools/validate.py examples/golden-record.yaml"
     },
     {
-      "id": "008",
-      "title": "Attack: uncovered-constraint",
-      "status": "completed",
-      "priority": "P1",
-      "description": "Add attack where constraints exist but no failing checks reference them.",
-      "acceptance_criteria": [
-        "Attack record rejected for uncovered constraint"
-      ],
-      "dependencies": [
-        "007"
-      ],
-      "test_file": "examples/attacks/attack-uncovered-constraint.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-uncovered-constraint.yaml 2>&1 | grep -q 'INVALID'"
-    },
-    {
       "id": "009",
+      "category": "observe_baseline",
       "title": "Timestamp ordering validation",
       "status": "completed",
       "priority": "P2",
@@ -154,22 +76,8 @@
       "verification": "python tools/validate.py examples/golden-record.yaml"
     },
     {
-      "id": "010",
-      "title": "Attack: temporal-inversion",
-      "status": "completed",
-      "priority": "P2",
-      "description": "Add attack where final_green timestamp predates first_red occurrence.",
-      "acceptance_criteria": [
-        "Attack record rejected for temporal inversion"
-      ],
-      "dependencies": [
-        "009"
-      ],
-      "test_file": "examples/attacks/attack-temporal-inversion.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-temporal-inversion.yaml 2>&1 | grep -q 'INVALID'"
-    },
-    {
       "id": "011",
+      "category": "observe_baseline",
       "title": "Diff file existence",
       "status": "completed",
       "priority": "P2",
@@ -186,6 +94,7 @@
     },
     {
       "id": "012",
+      "category": "observe_baseline",
       "title": "Human decision enforcement",
       "status": "completed",
       "priority": "P1",
@@ -202,22 +111,8 @@
       "retries": 1
     },
     {
-      "id": "013",
-      "title": "Attack: spec-drift",
-      "status": "completed",
-      "priority": "P2",
-      "description": "Add attack where constraints change without proper spec_delta documentation.",
-      "acceptance_criteria": [
-        "Attack record rejected for undocumented constraint change"
-      ],
-      "dependencies": [
-        "012"
-      ],
-      "test_file": "examples/attacks/attack-spec-drift.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-spec-drift.yaml 2>&1 | grep -q 'INVALID'"
-    },
-    {
       "id": "014",
+      "category": "observe_baseline",
       "title": "Negative constraint testing",
       "status": "completed",
       "priority": "P2",
@@ -233,22 +128,8 @@
       "verification": "python tools/validate.py examples/golden-record.yaml"
     },
     {
-      "id": "015",
-      "title": "Attack: fake-negative",
-      "status": "completed",
-      "priority": "P2",
-      "description": "Add attack where positive test is mislabeled as negative constraint test.",
-      "acceptance_criteria": [
-        "Attack record rejected for mislabeled negative test"
-      ],
-      "dependencies": [
-        "014"
-      ],
-      "test_file": "examples/attacks/attack-fake-negative.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-fake-negative.yaml 2>&1 | grep -q 'INVALID'"
-    },
-    {
       "id": "016",
+      "category": "observe_baseline",
       "title": "Work ID uniqueness",
       "status": "completed",
       "priority": "P2",
@@ -265,6 +146,7 @@
     },
     {
       "id": "017",
+      "category": "observe_baseline",
       "title": "Run ID consistency",
       "status": "completed",
       "priority": "P2",
@@ -281,6 +163,7 @@
     },
     {
       "id": "018",
+      "category": "observe_baseline",
       "title": "Empty failing checks guard",
       "status": "completed",
       "priority": "P1",
@@ -296,23 +179,8 @@
       "verification": "python tools/validate.py examples/golden-record.yaml"
     },
     {
-      "id": "019",
-      "title": "No-red rejection",
-      "status": "completed",
-      "priority": "P1",
-      "description": "Reject workunits where first_red.occurred is false (no red before green).",
-      "acceptance_criteria": [
-        "Pack-0001 (no-red) is INVALID",
-        "Golden record passes"
-      ],
-      "dependencies": [
-        "001"
-      ],
-      "test_file": "challenge-packs/pack-0001-no-red/workunit.yaml",
-      "verification": "python tools/validate.py challenge-packs/pack-0001-no-red/workunit.yaml 2>&1 | grep -q 'INVALID' && python tools/validate.py examples/golden-record.yaml 2>&1 | grep -q 'VALID'"
-    },
-    {
       "id": "020",
+      "category": "observe_baseline",
       "title": "Green check enforcement",
       "status": "completed",
       "priority": "P1",
@@ -329,6 +197,7 @@
     },
     {
       "id": "021",
+      "category": "observe_baseline",
       "title": "Constraint ID format",
       "status": "completed",
       "priority": "P3",
@@ -345,6 +214,7 @@
     },
     {
       "id": "022",
+      "category": "observe_baseline",
       "title": "Check ID format",
       "status": "completed",
       "priority": "P3",
@@ -361,6 +231,7 @@
     },
     {
       "id": "023",
+      "category": "observe_baseline",
       "title": "Summary metrics validation",
       "status": "completed",
       "priority": "P3",
@@ -377,6 +248,7 @@
     },
     {
       "id": "024",
+      "category": "observe_baseline",
       "title": "Environment specification",
       "status": "completed",
       "priority": "P3",
@@ -393,6 +265,7 @@
     },
     {
       "id": "025",
+      "category": "observe_baseline",
       "title": "Out-of-scope validation",
       "status": "completed",
       "priority": "P3",
@@ -409,6 +282,7 @@
     },
     {
       "id": "026",
+      "category": "observe_baseline",
       "title": "Rationale constraint linkage",
       "status": "completed",
       "priority": "P3",
@@ -425,6 +299,7 @@
     },
     {
       "id": "027",
+      "category": "observe_baseline",
       "title": "Security constraint direct red",
       "status": "completed",
       "priority": "P2",
@@ -438,6 +313,285 @@
       ],
       "test_file": "examples/golden-record.yaml",
       "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "002",
+      "category": "force_failure",
+      "title": "Relevance coupling enforcement",
+      "status": "completed",
+      "priority": "P0",
+      "description": "Enforce direct coupling so incidental red no longer satisfies performance constraints.",
+      "acceptance_criteria": [
+        "Pack-0002 is INVALID",
+        "Golden record remains VALID"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "challenge-packs/pack-0002-incidental-red/workunit.yaml",
+      "verification": "python tools/validate.py challenge-packs/pack-0002-incidental-red/workunit.yaml 2>&1 | grep -q 'INVALID' && python tools/validate.py examples/golden-record.yaml 2>&1 | grep -q 'VALID'"
+    },
+    {
+      "id": "003",
+      "category": "force_failure",
+      "title": "Attack: misleading-direct",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Add an adversarial record that labels a failing check as direct even though a human would dispute it.",
+      "acceptance_criteria": [
+        "Attack record exists",
+        "Validator behavior is documented"
+      ],
+      "dependencies": [
+        "002"
+      ],
+      "test_file": "examples/attacks/attack-misleading-direct.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-misleading-direct.yaml"
+    },
+    {
+      "id": "004",
+      "category": "force_failure",
+      "title": "Attack: indirect-omission",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Add attack where direct evidence exists but agent labels it indirect to avoid scrutiny.",
+      "acceptance_criteria": [
+        "Attack record exists",
+        "Validator rejects when direct evidence exists for critical constraint"
+      ],
+      "dependencies": [
+        "002"
+      ],
+      "test_file": "examples/attacks/attack-indirect-omission.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-indirect-omission.yaml 2>&1 | grep -q 'INVALID'"
+    },
+    {
+      "id": "006",
+      "category": "force_failure",
+      "title": "Attack: missing-evidence",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Add attack where workunit claims evidence exists at path but file is missing.",
+      "acceptance_criteria": [
+        "Attack record rejected for missing evidence file"
+      ],
+      "dependencies": [
+        "005"
+      ],
+      "test_file": "examples/attacks/attack-missing-evidence.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-missing-evidence.yaml 2>&1 | grep -q 'INVALID'"
+    },
+    {
+      "id": "008",
+      "category": "force_failure",
+      "title": "Attack: uncovered-constraint",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Add attack where constraints exist but no failing checks reference them.",
+      "acceptance_criteria": [
+        "Attack record rejected for uncovered constraint"
+      ],
+      "dependencies": [
+        "007"
+      ],
+      "test_file": "examples/attacks/attack-uncovered-constraint.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-uncovered-constraint.yaml 2>&1 | grep -q 'INVALID'"
+    },
+    {
+      "id": "010",
+      "category": "force_failure",
+      "title": "Attack: temporal-inversion",
+      "status": "completed",
+      "priority": "P2",
+      "description": "Add attack where final_green timestamp predates first_red occurrence.",
+      "acceptance_criteria": [
+        "Attack record rejected for temporal inversion"
+      ],
+      "dependencies": [
+        "009"
+      ],
+      "test_file": "examples/attacks/attack-temporal-inversion.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-temporal-inversion.yaml 2>&1 | grep -q 'INVALID'"
+    },
+    {
+      "id": "013",
+      "category": "force_failure",
+      "title": "Attack: spec-drift",
+      "status": "completed",
+      "priority": "P2",
+      "description": "Add attack where constraints change without proper spec_delta documentation.",
+      "acceptance_criteria": [
+        "Attack record rejected for undocumented constraint change"
+      ],
+      "dependencies": [
+        "012"
+      ],
+      "test_file": "examples/attacks/attack-spec-drift.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-spec-drift.yaml 2>&1 | grep -q 'INVALID'"
+    },
+    {
+      "id": "015",
+      "category": "force_failure",
+      "title": "Attack: fake-negative",
+      "status": "completed",
+      "priority": "P2",
+      "description": "Add attack where positive test is mislabeled as negative constraint test.",
+      "acceptance_criteria": [
+        "Attack record rejected for mislabeled negative test"
+      ],
+      "dependencies": [
+        "014"
+      ],
+      "test_file": "examples/attacks/attack-fake-negative.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-fake-negative.yaml 2>&1 | grep -q 'INVALID'"
+    },
+    {
+      "id": "019",
+      "category": "force_failure",
+      "title": "No-red rejection",
+      "status": "completed",
+      "priority": "P1",
+      "description": "Reject workunits where first_red.occurred is false (no red before green).",
+      "acceptance_criteria": [
+        "Pack-0001 (no-red) is INVALID",
+        "Golden record passes"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "challenge-packs/pack-0001-no-red/workunit.yaml",
+      "verification": "python tools/validate.py challenge-packs/pack-0001-no-red/workunit.yaml 2>&1 | grep -q 'INVALID' && python tools/validate.py examples/golden-record.yaml 2>&1 | grep -q 'VALID'"
+    },
+    {
+      "id": "028",
+      "category": "fix",
+      "title": "Challenge pack runner",
+      "status": "completed",
+      "priority": "P0",
+      "description": "Build tool to run validator against all challenge packs and generate pass/fail reports.",
+      "acceptance_criteria": [
+        "tools/pack-runner.py executes validation on all pack-* directories",
+        "Compares actual vs expected outcomes from expected.md",
+        "Generates structured pass/fail report",
+        "Returns appropriate exit code for CI integration"
+      ],
+      "dependencies": [],
+      "test_file": "tools/pack-runner.py",
+      "verification": "python tools/pack-runner.py"
+    },
+    {
+      "id": "029",
+      "category": "fix",
+      "title": "Build generator scaffold",
+      "status": "completed",
+      "priority": "P0",
+      "description": "Create interactive CLI tool for generating WorkUnits with validation feedback.",
+      "acceptance_criteria": [
+        "tools/workunit-generator.py exists with interactive CLI",
+        "Generator guides user through all WorkUnit sections",
+        "Performs basic validation before saving YAML output",
+        "--help flag displays usage information"
+      ],
+      "dependencies": [],
+      "test_file": "tools/workunit-generator.py",
+      "verification": "python tools/workunit-generator.py --help"
+    },
+    {
+      "id": "030",
+      "category": "accept",
+      "title": "Add CI integration",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Integrate WorkUnit validation into CI/CD pipeline for automated quality checks on pull requests.",
+      "acceptance_criteria": [
+        ".github/workflows/workunit-validation.yml exists",
+        "CI runs pack-runner on challenge packs",
+        "CI validates examples/golden-record.yaml on every push",
+        "Failed validation blocks merge",
+        "Clear error messages in CI logs"
+      ],
+      "dependencies": [
+        "028",
+        "029"
+      ],
+      "test_file": ".github/workflows/workunit-validation.yml",
+      "verification": "test -f .github/workflows/workunit-validation.yml"
+    },
+    {
+      "id": "031",
+      "category": "accept",
+      "title": "Improve static viewer",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Enhance site/index.html static viewer for better WorkUnit readability and evidence linking.",
+      "acceptance_criteria": [
+        "Viewer renders WorkUnit YAML in structured format",
+        "Evidence files are clickable/openable from viewer",
+        "Sections are navigable with anchors/toc",
+        "Viewer handles validation errors gracefully"
+      ],
+      "dependencies": [],
+      "test_file": "site/index.html",
+      "verification": "test -f site/index.html && grep -q 'WorkUnit' site/index.html"
+    },
+    {
+      "id": "035",
+      "category": "accept",
+      "title": "Evidence content verification",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Add optional deep verification of evidence file contents beyond mere existence.",
+      "acceptance_criteria": [
+        "validate.py supports --verify-contents flag",
+        "Checks evidence files contain expected patterns/logs",
+        "Fails if evidence is too small or malformed",
+        "Golden record passes content verification"
+      ],
+      "dependencies": [
+        "005"
+      ],
+      "test_file": "examples/golden-record.yaml",
+      "verification": "python tools/validate.py examples/golden-record.yaml"
+    },
+    {
+      "id": "041",
+      "category": "accept",
+      "title": "Create agent tutorial",
+      "status": "pending",
+      "priority": "P0",
+      "description": "Agent-first tutorial for WorkUnit production workflow using tools/workunit-generator.py.",
+      "acceptance_criteria": [
+        "docs/agent-tutorial.md exists",
+        "Tutorial shows step-by-step WorkUnit creation",
+        "Examples of common patterns (functional, negative, security constraints)",
+        "Explains coupling types (direct, indirect, incidental)",
+        "Demonstrates validation workflow"
+      ],
+      "dependencies": [
+        "029"
+      ],
+      "test_file": "docs/agent-tutorial.md",
+      "verification": "test -f docs/agent-tutorial.md"
+    },
+    {
+      "id": "045",
+      "category": "accept",
+      "title": "Create case studies",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Document real-world WorkUnit examples showing best practices and common pitfalls.",
+      "acceptance_criteria": [
+        "docs/case-studies.md exists",
+        "Multiple complete WorkUnit examples",
+        "Each study explains lessons learned",
+        "Includes both valid and anti-pattern examples",
+        "All example WorkUnits validate successfully"
+      ],
+      "dependencies": [
+        "041"
+      ],
+      "test_file": "docs/case-studies.md",
+      "verification": "test -f docs/case-studies.md"
     }
   ]
 }
