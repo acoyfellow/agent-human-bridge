@@ -314,7 +314,7 @@
     {
       "id": "020",
       "title": "Green check enforcement",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "Reject workunits where final_green.all_checks_passed is false.",
       "acceptance_criteria": [
