@@ -1,0 +1,61 @@
+# Attack: missing-evidence
+# Validator behavior: REJECTED (evidence_ref file does not exist)
+# When evidence_ref points to a non-existent file, the validator should reject.
+---
+audit_version: '1.0'
+work_id: ATTACK-missing-evidence
+timestamp_utc: '2026-01-22T00:00:00Z'
+repo_ref: example-repo@main
+actor:
+  human: you
+  agent: lazy-agent
+mini_spec:
+  summary: Fix authentication bug in login endpoint
+  constraints:
+  - id: C1
+    statement: Login fails with invalid credentials
+    type: functional
+  - id: C2
+    statement: Login succeeds with valid credentials
+    type: functional
+  out_of_scope:
+  - Password reset functionality
+check_suite:
+  location: tests/test_auth.py
+  run_command: pytest tests/test_auth.py -v
+  environment: python3.11 + pytest
+first_red:
+  occurred: true
+  failing_checks:
+  - check_id: test_login_invalid_credentials
+    constraint_ids:
+    - C1
+    evidence_ref: logs/nonexistent_first_red.txt
+    coupling: direct
+  - check_id: test_login_valid_credentials
+    constraint_ids:
+    - C2
+    evidence_ref: logs/nonexistent_first_red.txt
+    coupling: direct
+diff_set:
+  base_ref: abc123
+  final_ref: def789
+  files_changed:
+  - path: api/auth.py
+    change_type: modified
+  rationale:
+  - constraint_id: C1
+    note: Added proper error handling for invalid credentials
+  - constraint_id: C2
+    note: Verified auth flow works correctly
+final_green:
+  all_checks_passed: true
+  run_id: run-2026-01-22T00:00:00Z
+  evidence_ref: logs/nonexistent_final_green.txt
+  summary_metrics:
+    duration_seconds: 0.8
+    checks_executed: 4
+spec_delta:
+  changed: false
+  changes: []
+  human_decision: n/a

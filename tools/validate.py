@@ -42,14 +42,14 @@ def schema_validate(schema: dict, record: dict) -> list[str]:
         errs.append(f"{loc}: {e.message}")
     return errs
 
-def invariants(record: dict) -> list[str]:
+def invariants(record: dict, record_path: Path | None = None) -> list[str]:
     errs = []
     constraints = record.get("mini_spec", {}).get("constraints", [])
     if not constraints:
         errs.append("mini_spec.constraints must have at least 1 item")
 
     if record.get("first_red", {}).get("occurred") is not True:
-        errs.append("first_red.occurred must be true (no green without red)")
+        errs.append("first_red.occurred must be true (no red without green)")
 
     failing = record.get("first_red", {}).get("failing_checks", [])
     if record.get("first_red", {}).get("occurred") is True and len(failing) < 1:
@@ -81,6 +81,19 @@ def invariants(record: dict) -> list[str]:
     
     if missing_direct_red:
         errs.append(f"Constraints {missing_direct_red} lack a direct red (required for functional, negative, or performance types)")
+
+    # Evidence refs must exist on disk if they look like local paths
+    def check_evidence(ref: str, label: str):
+        if not ref or "://" in ref:
+            return
+        if record_path is None:
+            return
+        p = (record_path.parent / ref).resolve()
+        if not p.exists():
+            errs.append(f"{label}: evidence_ref '{ref}' does not exist on disk")
+    for fc in record.get("first_red", {}).get("failing_checks", []):
+        check_evidence(fc.get("evidence_ref",""), f"first_red.{fc.get('check_id','?')}")
+    check_evidence(record.get("final_green", {}).get("evidence_ref",""), "final_green")
 
     return errs
 
@@ -125,7 +138,7 @@ def main() -> int:
 
     errors = []
     errors += schema_validate(schema, record)
-    errors += invariants(record)
+    errors += invariants(record, record_path)
 
     warnings = []
     if strict and not errors:

@@ -94,7 +94,7 @@
     {
       "id": "006",
       "title": "Attack: missing-evidence",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "Add attack where workunit claims evidence exists at path but file is missing.",
       "acceptance_criteria": [
@@ -104,7 +104,7 @@
         "005"
       ],
       "test_file": "examples/attacks/attack-missing-evidence.yaml",
-      "verification": "python tools/validate.py examples/attacks/attack-missing-evidence.yaml"
+      "verification": "python tools/validate.py examples/attacks/attack-missing-evidence.yaml 2>&1 | grep -q 'INVALID'"
     },
     {
       "id": "007",
