@@ -282,7 +282,7 @@
     {
       "id": "018",
       "title": "Empty failing checks guard",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "When first_red.occurred is true, failing_checks must be non-empty.",
       "acceptance_criteria": [
