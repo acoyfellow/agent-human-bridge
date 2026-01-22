@@ -109,7 +109,7 @@
     {
       "id": "007",
       "title": "Constraint coverage enforcement",
-      "status": "pending",
+      "status": "completed",
       "priority": "P1",
       "description": "Ensure every constraint has at least one failing check mapped to it in first_red.",
       "acceptance_criteria": [
