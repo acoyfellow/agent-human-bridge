@@ -1,0 +1,63 @@
+{
+  "name": "ahs-project-loop",
+  "version": "1.0",
+  "north_star": "Leverage without abdication.",
+  "goal": "Build production tools that make WorkUnits easy to generate correctly.",
+  "rules": {
+    "prd_only": true,
+    "tests_first": true,
+    "verify_before_commit": true,
+    "max_retries": 5
+  },
+  "stories": [
+    {
+      "id": "001",
+      "title": "Schema validity guardrail",
+      "status": "completed",
+      "priority": "P0",
+      "description": "Ensure the audit schema is valid JSON and guard against accidental bidi/unicode hazards.",
+      "acceptance_criteria": [
+        "schemas/ahs-audit.schema.json parses as valid JSON"
+      ],
+      "dependencies": [],
+      "files_to_modify": [
+        "scripts/loop/run.py",
+        "scripts/loop/README.md"
+      ],
+      "test_file": "schemas/ahs-audit.schema.json",
+      "verification": "python -m json.tool schemas/ahs-audit.schema.json > /dev/null"
+    },
+    {
+      "id": "002",
+      "title": "Relevance coupling enforcement",
+      "status": "pending",
+      "priority": "P0",
+      "description": "Enforce direct coupling so incidental red no longer satisfies performance constraints.",
+      "acceptance_criteria": [
+        "Pack-0002 is INVALID",
+        "Golden record remains VALID"
+      ],
+      "dependencies": [
+        "001"
+      ],
+      "test_file": "challenge-packs/pack-0002-incidental-red/workunit.yaml",
+      "verification": "python tools/validate.py challenge-packs/pack-0002-incidental-red/workunit.yaml"
+    },
+    {
+      "id": "003",
+      "title": "Attack: misleading-direct",
+      "status": "pending",
+      "priority": "P1",
+      "description": "Add an adversarial record that labels a failing check as direct even though a human would dispute it.",
+      "acceptance_criteria": [
+        "Attack record exists",
+        "Validator behavior is documented"
+      ],
+      "dependencies": [
+        "002"
+      ],
+      "test_file": "examples/attacks/attack-misleading-direct.yaml",
+      "verification": "python tools/validate.py examples/attacks/attack-misleading-direct.yaml"
+    }
+  ]
+}

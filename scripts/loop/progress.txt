@@ -1,0 +1,7 @@
+# Project Loop Progress Log
+
+This file tracks completed iterations, failures, learnings, and footguns encountered during the project loop.
+
+Format: One entry per completed or failed story.
+- Records learnings, failure modes, and footguns
+COMPLETE: Story 001 - Schema validity guardrail
