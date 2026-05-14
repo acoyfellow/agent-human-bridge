@@ -19,6 +19,21 @@ Use this when you want agents to iterate quickly, while humans can verify:
   4) observed passing evidence (FinalGreen),
   5) explicit goalpost moves (SpecDelta).
 
+## How this works (at a glance)
+
+1. **Define intent**: write a MiniSpec with observable constraints.
+2. **Run checks**: capture the first failure as `first_red` evidence.
+3. **Make changes**: record concrete edits in `diff_set`.
+4. **Re-run checks**: capture passing evidence in `final_green`.
+5. **Handle spec changes**: if intent or checks change, record `spec_delta` and a human decision.
+
+The state machine in `docs/02-state-machine.md` ties each step to an audit artifact, so a human can trace intent → failure → change → green without silent goalpost moves.
+
+## Using the tools
+
+- **Validate a record**: run `python3 tools/validate.py path/to/record.yaml` to check schema + invariants.
+- **View a record**: open `site/index.html` and drag in a YAML/JSON record for a lightweight audit view.
+
 ## Repository layout
 
 - `docs/`
