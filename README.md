@@ -13,7 +13,11 @@ This repo contains:
 ## What this is for
 
 Use this when you want agents to iterate quickly, while humans can verify:
-1) intent (MiniSpec), 2) first failure (FirstRed), 3) concrete change (DiffSet), 4) observed passing evidence (FinalGreen), 5) explicit goalpost moves (SpecDelta).
+  1) intent (MiniSpec),
+  2) first failure (FirstRed),
+  3) concrete change (DiffSet),
+  4) observed passing evidence (FinalGreen),
+  5) explicit goalpost moves (SpecDelta).
 
 ## Repository layout
 
